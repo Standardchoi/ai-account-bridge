@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="256" height="256">
+  <!-- AI Account Bridge 앱 아이콘: 두 점(계정)을 잇는 다리 모양 화살표. 창·설치 파일용 PNG·ICO 는 scripts/build-app-icon.mjs 가 src-tauri/icons/ 에 굽는다. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5b8cff" />
+      <stop offset="1" stop-color="#2150e0" />
+    </linearGradient>
+    <linearGradient id="hl" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.22" />
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <rect width="24" height="24" rx="5.5" fill="url(#bg)" />
+  <rect width="24" height="24" rx="5.5" fill="url(#hl)" />
+  <g fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6.6 12.4C7.3 8.9 9.4 7 12 7c2.5 0 4.5 1.7 5.3 4.8" />
+    <path d="M14.9 10.1L17.3 11.8l1.3-2.7" />
+  </g>
+  <circle cx="6.5" cy="16.6" r="2.6" fill="#ffffff" />
+  <circle cx="17.5" cy="16.6" r="2.6" fill="#ffffff" />
+</svg>

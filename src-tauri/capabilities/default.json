@@ -1,0 +1,21 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "메인 창: 창 조작(직접 그린 제목 표시줄), 백업 파일 고르기, 백엔드 사이드카 실행과 stdin 쓰기",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "core:window:allow-minimize",
+    "core:window:allow-toggle-maximize",
+    "core:window:allow-internal-toggle-maximize",
+    "core:window:allow-close",
+    "core:window:allow-start-dragging",
+    "dialog:allow-open",
+    {
+      "identifier": "shell:allow-spawn",
+      "allow": [{ "name": "binaries/aab-backend", "sidecar": true }]
+    },
+    "shell:allow-stdin-write",
+    "shell:allow-kill"
+  ]
+}

@@ -1,0 +1,8 @@
+node_modules/
+out/
+dist/
+*.log
+.env
+src-tauri/target/
+src-tauri/binaries/
+src-tauri/gen/

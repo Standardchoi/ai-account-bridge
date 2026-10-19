@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>AI Account Bridge</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header class="topbar" data-tauri-drag-region>
+  <div class="brand" data-tauri-drag-region><img class="brand-logo" src="assets/icon.svg" alt="" /><span>AI Account Bridge</span></div>
+  <button class="switcher" id="switcher-codex" type="button" aria-haspopup="menu" aria-expanded="false"></button>
+  <button class="switcher" id="switcher-claude" type="button" aria-haspopup="menu" aria-expanded="false"></button>
+  <div class="topbar-actions" data-tauri-drag-region>
+    <button class="top-btn" id="activity-btn" type="button" title="활동 기록 · 백업에서 복원"><span data-icon="history"></span>활동 기록</button>
+  </div>
+  <div class="caption" role="group" aria-label="창">
+    <button class="cap-btn" id="win-min" type="button" title="최소화" aria-label="최소화"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M0 5.5h10" /></svg></button>
+    <button class="cap-btn" id="win-max" type="button" title="최대화" aria-label="최대화"><svg class="max" viewBox="0 0 10 10" aria-hidden="true"><rect x="0.5" y="0.5" width="9" height="9" rx="1" /></svg><svg class="restore" viewBox="0 0 10 10" aria-hidden="true"><rect x="0.5" y="2.5" width="7" height="7" rx="1" /><path d="M2.5 2.5V1.5a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-1" /></svg></button>
+    <button class="cap-btn close" id="win-close" type="button" title="닫기" aria-label="닫기"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M0.5 0.5l9 9M9.5 0.5l-9 9" /></svg></button>
+  </div>
+</header>
+
+<main class="workspace" id="workspace">
+  <section class="pane" id="source-pane" aria-label="보내는 쪽">
+    <div class="pane-head">
+      <div class="ph-row">
+        <span class="ph-label">보내는 쪽</span>
+        <button class="icon-btn" id="source-refresh" type="button" title="새로고침 (F5)" aria-label="새로고침"><span data-icon="refresh-cw"></span></button>
+      </div>
+      <div class="ph-row">
+        <div class="seg" id="source-tool" role="radiogroup" aria-label="보내는 도구"></div>
+        <button class="select" id="source-account" type="button" aria-haspopup="listbox" aria-expanded="false"></button>
+      </div>
+      <label class="search"><span data-icon="search"></span><input id="source-search" type="search" placeholder="제목이나 폴더로 검색" aria-label="세션 검색 (Ctrl+F)" autocomplete="off" /></label>
+      <div class="chips">
+        <button type="button" class="chip" id="chip-subagents" aria-pressed="false">서브에이전트</button>
+        <button type="button" class="chip" id="chip-archived" aria-pressed="false">보관됨</button>
+      </div>
+    </div>
+    <div class="pane-body list" id="source-list" aria-label="보낼 세션"></div>
+    <div class="pane-foot" id="source-foot"></div>
+  </section>
+
+  <div class="mid">
+    <button class="go-btn" id="go-btn" type="button" title="선택한 세션 가져오기 (Ctrl+Enter)" aria-label="가져오기" disabled><span data-icon="arrow-right"></span><em id="go-count" class="hidden"></em></button>
+    <span class="go-label">가져오기</span>
+    <button class="swap-btn" id="swap-btn" type="button" title="보내는 쪽과 받는 쪽 바꾸기" aria-label="방향 바꾸기"><span data-icon="arrow-left-right"></span></button>
+  </div>
+
+  <section class="pane target" id="target-pane" aria-label="받는 쪽">
+    <div class="pane-head">
+      <div class="ph-row">
+        <span class="ph-label">받는 쪽</span>
+        <button class="icon-btn" id="target-refresh" type="button" title="새로고침" aria-label="받는 쪽 새로고침"><span data-icon="refresh-cw"></span></button>
+      </div>
+      <button class="select big" id="target-select" type="button" aria-haspopup="listbox" aria-expanded="false"></button>
+    </div>
+    <div class="pane-body list" id="target-body">
+      <div class="dropzone" id="dropzone"><span data-icon="download"></span><span id="dropzone-text">세션을 여기로 끌어다 놓으세요</span></div>
+      <div id="target-list"></div>
+    </div>
+    <div class="pane-foot"><span data-icon="shield-check"></span>원본은 그대로 두고 받는 쪽에 새 세션을 만듭니다</div>
+  </section>
+
+  <aside class="drawer hidden" id="preview" aria-label="대화 미리보기"></aside>
+</main>
+
+<footer class="statusbar" id="statusbar" title="활동 기록 열기">
+  <span class="status-icon" id="status-icon"></span>
+  <span class="status-text" id="status-text"></span>
+  <span class="status-time" id="status-time"></span>
+</footer>
+
+<aside class="sheet hidden" id="activity" aria-label="활동 기록">
+  <div class="sheet-head">
+    <h2>활동 기록</h2>
+    <button class="icon-btn" id="activity-close" type="button" aria-label="닫기"><span data-icon="x"></span></button>
+  </div>
+  <div class="sheet-actions">
+    <button class="btn action-btn" id="restore-btn" type="button"><span data-icon="archive-restore"></span>백업에서 복원…</button>
+    <span class="hint">전환하기 전의 로그인은 자동으로 백업됩니다</span>
+  </div>
+  <div class="log" id="log"></div>
+  <p class="paths" id="paths-line"></p>
+</aside>
+
+<div class="toasts" id="toasts" aria-live="assertive"></div>
+
+<div id="modal-overlay" class="smoke hidden">
+  <div id="modal" class="dialog" role="dialog" aria-modal="true"></div>
+</div>
+
+<script src="icons.js"></script>
+<script src="bridge.js"></script>
+<script src="vendor/marked.umd.js"></script>
+<script src="renderer.js"></script>
+</body>
+</html>

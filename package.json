@@ -1,0 +1,33 @@
+{
+  "name": "ai-account-bridge",
+  "version": "0.3.2",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "cli": "tsx src/cli/index.ts",
+    "gui": "npm run build:sidecar && tauri dev",
+    "icons": "node scripts/build-icons.mjs",
+    "app-icon": "node scripts/build-app-icon.mjs",
+    "build:sidecar": "node scripts/build-sidecar.mjs",
+    "dist": "npm run build:sidecar && tauri build && node scripts/build-dist.mjs"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.0.3"
+  },
+  "devDependencies": {
+    "@phosphor-icons/core": "^2.1.1",
+    "@resvg/resvg-js": "^2.6.2",
+    "@tauri-apps/cli": "^2.12.0",
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "^26.6.2",
+    "esbuild": "^0.28.2",
+    "postject": "^1.0.0-alpha.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.1"
+  },
+  "description": "ChatGPT(Codex)·Claude 데스크톱 앱의 계정 전환과 세션 이관 도구",
+  "author": "Standardchoi"
+}

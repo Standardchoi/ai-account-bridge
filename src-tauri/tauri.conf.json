@@ -1,0 +1,63 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "AI Account Bridge",
+  "mainBinaryName": "AIAccountBridge",
+  "version": "0.3.2",
+  "identifier": "com.jschoi.aiaccountbridge",
+  "build": {
+    "frontendDist": "../gui"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "AI Account Bridge",
+        "width": 1120,
+        "height": 760,
+        "minWidth": 940,
+        "minHeight": 600,
+        "center": true,
+        "decorations": false,
+        "backgroundColor": "#1b1e24"
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src ipc: http://ipc.localhost"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": [
+      "nsis"
+    ],
+    "publisher": "Standardchoi",
+    "shortDescription": "ChatGPT(Codex)·Claude 계정 전환과 세션 이관",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.ico"
+    ],
+    "externalBin": [
+      "binaries/aab-backend"
+    ],
+    "resources": {
+      "binaries/better_sqlite3.node": "better_sqlite3.node"
+    },
+    "windows": {
+      "nsis": {
+        "installerIcon": "icons/icon.ico",
+        "languages": [
+          "Korean"
+        ],
+        "displayLanguageSelector": false,
+        "installMode": "both",
+        "installerHooks": "nsis/hooks.nsh",
+        "customLanguageFiles": {
+          "Korean": "nsis/Korean.nsh"
+        }
+      }
+    }
+  }
+}

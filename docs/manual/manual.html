@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>AI Account Bridge 사용 설명서</title>
+<style>
+@font-face {
+  font-family: "Pretendard Variable";
+  src: url("../../gui/fonts/PretendardVariable.woff2") format("woff2");
+  font-weight: 45 920;
+}
+@page { size: A4; margin: 16mm 17mm 16mm; }
+:root {
+  --ink: #111318; --ink2: #4a5160; --ink3: #7b8290; --line: #e3e6eb; --soft: #f5f6f8;
+  --accent: #2458e6; --accent-t: #eaf0ff; --top: #1b1e24; --badge: #e5484d; --warn: #b3261e; --warn-t: #fdecea;
+}
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; color: var(--ink); font: 10.5pt/1.62 "Pretendard Variable", "Malgun Gothic", sans-serif; letter-spacing: -0.005em; word-break: keep-all; }
+h1, h2, h3 { margin: 0; letter-spacing: -0.02em; }
+p { margin: 0 0 6pt; }
+code, .tag { padding: 0.5pt 5pt; border-radius: 3pt; background: var(--soft); border: 0.6pt solid var(--line); font-size: 0.93em; font-weight: 600; white-space: nowrap; }
+kbd { font-family: "Cascadia Mono", Consolas, monospace; font-size: 0.9em; }
+code { padding: 0.5pt 3pt; border-radius: 3pt; background: var(--soft); border: 0.6pt solid var(--line); }
+kbd { display: inline-block; min-width: 16pt; padding: 0 4pt; border: 0.7pt solid #c9ced6; border-bottom-width: 1.4pt; border-radius: 3pt; background: #fff; text-align: center; font-size: 8.5pt; line-height: 14pt; }
+
+/* 표지 띠 */
+.cover { display: flex; align-items: center; gap: 12pt; margin: 0 0 14pt; padding: 16pt 18pt; border-radius: 10pt; background: var(--top); color: #fff; }
+.cover img { width: 38pt; height: 38pt; }
+.cover h1 { font-size: 20pt; font-weight: 800; }
+.cover p { margin: 2pt 0 0; color: #aab1bd; font-size: 10pt; }
+.cover .ver { margin-left: auto; padding: 3pt 8pt; border: 0.8pt solid #3a404b; border-radius: 20pt; color: #d7dbe2; font-size: 9pt; white-space: nowrap; }
+
+.intro { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8pt; margin-bottom: 16pt; }
+.intro div { padding: 9pt 11pt; border: 0.8pt solid var(--line); border-radius: 8pt; background: #fff; }
+.intro b { display: block; margin-bottom: 2pt; color: var(--accent); font-size: 10.5pt; }
+.intro span { color: var(--ink2); font-size: 9.5pt; line-height: 1.5; }
+
+section { margin-bottom: 14pt; }
+section.page { break-before: page; }
+h2 { display: flex; align-items: center; gap: 7pt; margin: 0 0 7pt; font-size: 14pt; font-weight: 800; }
+h2 .n { display: inline-grid; place-items: center; width: 18pt; height: 18pt; border-radius: 5pt; background: var(--accent); color: #fff; font-size: 10pt; font-weight: 800; }
+h3 { margin: 9pt 0 4pt; font-size: 11pt; font-weight: 700; }
+
+ol.steps { margin: 0 0 6pt; padding: 0; list-style: none; counter-reset: s; }
+ol.steps > li { position: relative; margin: 0 0 4pt; padding-left: 20pt; counter-increment: s; }
+ol.steps > li::before { content: counter(s); position: absolute; left: 0; top: 1.5pt; display: grid; place-items: center; width: 13pt; height: 13pt; border-radius: 50%; background: var(--accent-t); color: var(--accent); font-size: 8pt; font-weight: 800; }
+ul.dots { margin: 0 0 6pt; padding-left: 14pt; }
+ul.dots li { margin: 0 0 2.5pt; }
+.b { font-weight: 700; }
+
+figure { margin: 6pt 0 10pt; break-inside: avoid; }
+figure img { display: block; width: 100%; border: 0.8pt solid #d3d7de; border-radius: 6pt; }
+figure.half { display: flex; gap: 12pt; align-items: flex-start; }
+figure.half img { width: auto; }
+figcaption { margin-top: 4pt; color: var(--ink3); font-size: 8.5pt; }
+
+.legend { display: grid; grid-template-columns: 1fr 1fr; gap: 3pt 14pt; margin: 4pt 0 0; padding: 0; list-style: none; }
+.legend li { display: flex; gap: 7pt; align-items: baseline; font-size: 9.5pt; }
+.legend i { flex: none; display: inline-grid; place-items: center; width: 14pt; height: 14pt; border-radius: 50%; background: var(--badge); color: #fff; font-style: normal; font-size: 8pt; font-weight: 800; transform: translateY(2pt); }
+
+.warn { margin: 6pt 0 8pt; padding: 8pt 11pt; border-left: 3pt solid var(--warn); border-radius: 0 6pt 6pt 0; background: var(--warn-t); color: #5c1a15; font-size: 9.5pt; }
+.warn b { color: var(--warn); }
+.tip { margin: 6pt 0 8pt; padding: 8pt 11pt; border-left: 3pt solid var(--accent); border-radius: 0 6pt 6pt 0; background: var(--accent-t); color: #1c2f66; font-size: 9.5pt; }
+
+table { width: 100%; margin: 4pt 0 8pt; border-collapse: collapse; font-size: 9.5pt; break-inside: avoid; }
+th, td { padding: 5pt 8pt; border: 0.7pt solid var(--line); text-align: left; vertical-align: top; }
+th { background: var(--soft); font-weight: 700; }
+td:first-child { white-space: nowrap; }
+
+.side { display: grid; grid-template-columns: 1fr 175pt; gap: 14pt; align-items: start; }
+.side figure { margin-top: 0; }
+
+h2.gap { margin-top: 16pt; }
+.side figure.narrow { width: 130pt; justify-self: end; }
+.side.wide { grid-template-columns: 1fr 155pt; }
+.two { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 16pt; align-items: start; margin-top: 4pt; }
+.faq { margin: 0; }
+figure.shrink img { width: 70%; margin: 0 auto; }
+figure.shrink figcaption { text-align: center; }
+.faq dt { margin-top: 5pt; font-weight: 700; font-size: 9.5pt; }
+.faq dt:first-child { margin-top: 0; }
+.faq dd { margin: 1pt 0 0; color: var(--ink2); font-size: 9.5pt; }
+.foot { margin-top: 16pt; padding-top: 8pt; border-top: 0.7pt solid var(--line); color: var(--ink3); font-size: 8.5pt; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <img src="../../gui/assets/icon.svg" alt="" />
+  <div>
+    <h1>AI Account Bridge 사용 설명서</h1>
+    <p>ChatGPT(Codex)·Claude 데스크톱 앱의 계정 전환과 대화 옮기기</p>
+  </div>
+  <span class="ver">v{{version}} · Windows</span>
+</div>
+
+<div class="intro">
+  <div><b>계정 전환</b><span>ChatGPT(Codex 앱)와 Claude 데스크톱 앱의 계정을 로그아웃 없이 한 번에 바꿉니다.</span></div>
+  <div><b>대화 옮기기</b><span>Codex ↔ Claude, Claude 계정 A → B로 대화(세션)를 옮겨 이어서 작업합니다.</span></div>
+  <div><b>원본은 그대로</b><span>옮길 때 원본은 건드리지 않고 받는 쪽에 새 세션을 만듭니다.</span></div>
+</div>
+
+<section>
+  <h2><span class="n">1</span>설치</h2>
+  <ol class="steps">
+    <li><code>AI Account Bridge_{{version}}_x64-setup.exe</code>(약 25MB)를 실행합니다.</li>
+    <li><span class="b">“Windows의 PC 보호”</span> 창이 뜨면 <span class="b">[추가 정보] → [실행]</span>을 누릅니다. 코드 서명이 없어서 뜨는 안내입니다.</li>
+    <li>관리자 계정이면 <span class="b">사용자 계정 컨트롤</span> 창이 뜹니다 → <span class="b">[예]</span>.</li>
+    <li>설치 범위(<span class="b">나만 쓰기</span> / <span class="b">이 컴퓨터를 쓰는 모든 사용자</span>)를 고르고 <span class="b">[다음] → [설치] → [마침]</span>. 시작 메뉴에 <span class="b">AI Account Bridge</span>가 생깁니다.</li>
+  </ol>
+  <ul class="dots">
+    <li>Windows 10/11 64비트용입니다. 화면을 그리는 WebView2는 Windows 11에 기본으로 들어 있고, 없으면 설치 중에 자동으로 내려받습니다(인터넷 필요).</li>
+    <li>새 버전은 설치 파일을 그대로 실행하면 이전 버전(0.2.0 이상) 위에 설치됩니다. 0.1.0을 설치했다면 먼저 <span class="b">설정 → 앱</span>에서 제거하세요. 어느 쪽이든 등록한 계정은 그대로 남습니다.</li>
+    <li>제거: <span class="b">설정 → 앱 → AI Account Bridge → 제거</span>. 등록한 계정·백업(<code>%USERPROFILE%\.ai-account-bridge</code>)은 남습니다.</li>
+  </ul>
+</section>
+
+<section class="page">
+  <h2><span class="n">2</span>화면 구성</h2>
+  <figure>
+    <img src="img/overview.png" alt="전체 화면" />
+  </figure>
+  <ul class="legend">
+    <li><i>1</i><span><span class="b">계정 막대</span> — 도구별 현재 계정. 눌러서 전환합니다(초록 점 = 등록된 계정).</span></li>
+    <li><i>5</i><span><span class="b">받는 곳</span> — 대화를 옮길 대상(ChatGPT / Claude 계정).</span></li>
+    <li><i>2</i><span><span class="b">보내는 도구</span> — ChatGPT / Claude. 오른쪽에서 계정별로 거릅니다.</span></li>
+    <li><i>6</i><span><span class="b">상태 표시줄</span> — 마지막 작업 결과. 누르면 활동 기록이 열립니다.</span></li>
+    <li><i>3</i><span><span class="b">세션 목록</span> — ChatGPT는 Codex 앱과 같은 프로젝트별로(나머지는 “프로젝트 없음”), Claude는 작업 폴더별로 묶입니다.</span></li>
+    <li><i>7</i><span><span class="b">활동 기록</span> — 작업 기록과 백업 복원.</span></li>
+    <li><i>4</i><span><span class="b">가져오기</span> — 고른 세션을 받는 곳으로 옮깁니다.</span></li>
+  </ul>
+</section>
+
+<section class="page">
+  <h2><span class="n">3</span>계정 전환</h2>
+  <div class="side">
+    <div>
+      <h3>처음 한 번: 지금 로그인한 계정 저장</h3>
+      <ol class="steps">
+        <li>ChatGPT(Codex) 또는 Claude 앱에 평소처럼 로그인합니다.</li>
+        <li>계정 막대를 눌러 <span class="b">[현재 로그인 저장…]</span>을 누르고 이름(예: 회사 계정)을 붙입니다. 아직 등록하지 않은 로그인은 메뉴 맨 위에 <span class="b">“등록되지 않은 로그인”</span>으로 보이며, 옆의 <span class="b">[저장…]</span>으로도 됩니다.</li>
+      </ol>
+      <h3>다른 계정 추가</h3>
+      <ol class="steps">
+        <li>메뉴에서 <span class="b">[새 계정 추가]</span>를 누르면 지금 계정을 저장한 뒤 앱이 로그인 화면으로 다시 열립니다.</li>
+        <li>앱에서 새 계정으로 로그인하고, 위와 같이 <span class="b">[저장…]</span>합니다.</li>
+      </ol>
+      <div class="warn"><b>앱 안에서 “로그아웃”하지 마세요.</b> 그 계정의 로그인이 서버에서 폐기되어 저장해 둔 계정도 쓸 수 없게 됩니다. 계정을 늘릴 때는 항상 [새 계정 추가]를 씁니다.</div>
+      <h3>전환</h3>
+      <p>메뉴에서 바꿀 계정을 누르면 앱을 닫고 → 로그인 정보를 바꾸고 → 다시 엽니다(몇 초). 계정 줄에 마우스를 올리면 나오는 연필·휴지통으로 이름 변경·삭제를 합니다. 삭제는 이 앱의 저장본만 지우고 앱의 실제 로그인은 그대로 둡니다.</p>
+      <div class="tip"><b>ChatGPT는 계정을 바꿔도 대화 목록이 그대로입니다.</b> Codex 세션은 이 PC에 저장되어 어느 GPT 계정으로 로그인해도 같은 목록이 보이므로, GPT 계정끼리는 대화를 옮길 필요가 없습니다. 그래서 받는 곳도 “ChatGPT · 모든 계정” 하나입니다.</div>
+    </div>
+    <figure>
+      <img src="img/account-menu.png" alt="계정 메뉴" />
+      <figcaption>계정 막대를 누르면 열리는 메뉴</figcaption>
+    </figure>
+  </div>
+
+  <h2 class="gap"><span class="n">4</span>활동 기록과 백업 복원</h2>
+  <div class="side">
+    <div>
+      <p>작업 결과는 상태 표시줄과 오른쪽 위 <span class="b">활동 기록</span>에 남고, 경고·오류는 알림으로 뜹니다.</p>
+      <p>계정을 전환하기 전의 로그인은 <span class="b">자동으로 백업</span>됩니다. 전환이 꼬였다면 <span class="b">[활동 기록] → [백업에서 복원…]</span>에서 백업 파일을 고르면 그때 상태로 되돌아갑니다.</p>
+    </div>
+    <figure>
+      <img src="img/activity-crop.png" alt="활동 기록" />
+      <figcaption>활동 기록과 [백업에서 복원…]</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="n">5</span>대화(세션) 옮기기</h2>
+  <ol class="steps">
+    <li>왼쪽에서 도구를 고르고 옮길 세션을 선택합니다. <kbd>Ctrl</kbd>·<kbd>Shift</kbd>+클릭으로 여러 개, 프로젝트 체크박스로 한꺼번에 고릅니다.</li>
+    <li>오른쪽 위에서 <span class="b">받는 곳</span>을 고릅니다.</li>
+    <li>오른쪽으로 <span class="b">끌어다 놓거나</span> 가운데 화살표(<kbd>Ctrl</kbd>+<kbd>Enter</kbd>)를 누릅니다.</li>
+    <li>확인 창에서 <span class="b">[가져오기]</span>. 받는 앱이 켜져 있으면 닫았다가 다시 엽니다.</li>
+  </ol>
+  <figure class="shrink">
+    <img src="img/drag.png" alt="세션 두 개를 받는 쪽으로 끌어다 놓는 중" />
+    <figcaption>세션 두 개를 골라 받는 쪽으로 끌어다 놓는 중</figcaption>
+  </figure>
+  <div class="side wide">
+    <div>
+      <table>
+        <tr><th>보내는 쪽 → 받는 쪽</th><th>결과</th></tr>
+        <tr><td>ChatGPT → Claude</td><td>Claude의 Code 탭에 <span class="tag">[Codex] 제목</span>으로 추가</td></tr>
+        <tr><td>Claude → ChatGPT</td><td>Codex 앱에 <span class="tag">[Claude] 제목</span>으로 추가</td></tr>
+        <tr><td>Claude 계정 A → B</td><td>B 계정에 복사본을 만듦(Code 세션만)</td></tr>
+      </table>
+      <ul class="dots">
+        <li>도구 실행 기록은 한 줄 요약만 옮깁니다(<span class="b">도구 실행 기록 전부 넣기</span>를 켜면 전부). 붙인 이미지·첨부 파일 경로도 옮겨집니다.</li>
+        <li>첫머리에 옮겨 왔다는 안내와 작업 폴더의 git 저장소별 브랜치·커밋하지 않은 변경이 붙습니다.</li>
+        <li><span class="b">지침 파일도 복사</span>: AGENTS.md ↔ CLAUDE.md를 받는 쪽 형식으로 만듭니다(하위 저장소 포함).</li>
+        <li>이미 옮긴 세션은 <span class="b">건너뛰기</span>(기본) 또는 <span class="b">새 복사본</span>을 고릅니다. 옮긴 세션에는 <span class="tag">이관됨</span> 표시가 붙습니다.</li>
+        <li>받는 쪽에 세션이 하나는 있어야 합니다. 없으면 받는 앱에서 새 대화를 하나 만든 뒤 다시 시도하세요.</li>
+        <li><span class="b">GPT 대화 폴더도 복사해 따로 쓰기</span>: 프로젝트 없이 시작한 GPT 대화를 Claude로 옮길 때 그 폴더를 복사해 따로 씁니다.</li>
+      </ul>
+    </div>
+    <figure>
+      <img src="img/import-dialog.png" alt="가져오기 확인 창" />
+      <figcaption>가져오기 확인 창</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="n">6</span>대화 미리보기</h2>
+  <p>세션을 <span class="b">더블클릭</span>(또는 <kbd>Enter</kbd>, 눈 아이콘)하면 오른쪽에 대화가 열립니다. 답변은 마크다운으로 보이고, 이어진 도구 호출은 <span class="b">“도구 호출 N개”</span> 한 줄로 접혀 있다가 누르면 펼쳐집니다. 미리보기 위의 버튼으로 바로 가져올 수도 있습니다.</p>
+  <figure>
+    <img src="img/preview.png" alt="대화 미리보기" />
+  </figure>
+
+  <div class="two">
+    <div>
+      <h2><span class="n">7</span>단축키</h2>
+      <table>
+        <tr><td><kbd>Ctrl</kbd>+<kbd>F</kbd></td><td>검색</td></tr>
+        <tr><td><kbd>F5</kbd></td><td>새로고침</td></tr>
+        <tr><td><kbd>Ctrl</kbd>+<kbd>A</kbd></td><td>모두 선택</td></tr>
+        <tr><td><kbd>Ctrl</kbd>+<kbd>Enter</kbd></td><td>고른 세션 가져오기</td></tr>
+        <tr><td><kbd>↑</kbd><kbd>↓</kbd> <kbd>Space</kbd> <kbd>Enter</kbd></td><td>이동 · 선택 · 미리보기</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>닫기 / 선택 해제</td></tr>
+      </table>
+    </div>
+    <div>
+      <h2><span class="n">8</span>자주 묻는 질문</h2>
+      <dl class="faq">
+        <dt>옮긴 대화가 받는 앱에 안 보여요.</dt>
+        <dd>받는 앱을 트레이까지 완전히 종료한 뒤 다시 열어 보세요.</dd>
+        <dt>ChatGPT 계정을 바꾸면 대화 목록도 바뀌나요?</dt>
+        <dd>아니요. Codex 세션은 PC에 저장되어 계정과 상관없이 같은 목록이 보입니다(chatgpt.com 웹 대화는 이 앱과 무관).</dd>
+        <dt>이 앱에서 계정을 지우면 앱 로그인도 사라지나요?</dt>
+        <dd>아니요. 이 앱의 등록·저장본만 지웁니다.</dd>
+        <dt>프로그램을 지우면 데이터는요?</dt>
+        <dd><code>%USERPROFILE%\.ai-account-bridge</code>에 남습니다. 완전히 지우려면 이 폴더도 삭제하세요.</dd>
+      </dl>
+    </div>
+  </div>
+
+  <p class="foot">비공식 커뮤니티 도구이며 OpenAI·Anthropic과 관계없습니다. 앱 내부 파일 형식에 의존하므로 앱이 업데이트되면 동작하지 않을 수 있습니다. 본인 소유 계정 간 전환 용도로만 사용하세요.</p>
+</section>
+
+</body>
+</html>
